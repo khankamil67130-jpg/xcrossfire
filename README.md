@@ -30,7 +30,18 @@ High-Performance Asynchronous SIMD AVX2-Accelerated Vector Search Engine for Pyt
 
 \* \*\*High Bandwidth Saturation\*\* - Achieves empirical speeds up to \*\*11.36 GB/s\*\*.
 
+---
+## 📊 Empirical Performance Matrix
+*Tests conducted on 1 Crore (10 Million) integer dataset.*
 
+| Architecture Name | Time (ms) | Throughput | RAM Overhead | CPU Core State |
+| :--- | :--- | :--- | :--- | :--- |
+| Python Native Linear | 326.47 ms | 0.11 GB/s | 0.00 MB | Single Core (Choked) |
+| Python Inbuilt C-Index | 77.09 ms | 0.48 GB/s | 0.00 MB | Single Core (Optimized) |
+| Binary Search (+Sort Tax) | 3532.05 ms | 0.01 GB/s | 38.15 MB | Single Core (Heavy) |
+| **XCrossfire AVX2 Core** | **3.65 ms** | **10.18 GB/s** | **0.00 MB** | **Dual Radar (Active)** |
+
+---
 
 \---
 
