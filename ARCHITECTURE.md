@@ -20,73 +20,39 @@ Official technical specification and execution topology of the \*\*XCrossfire Ve
 
 ```mermaid
 
-graph TD
+   graph TD
+    %% Frontend Input Layer
+    subgraph Python_Frontend [Python Input Layer]
+        A1[Continuous Int32 Array]
+        A2[Continuous Float32 Array]
+        A3[Unsorted Raw Memory Buffers]
+    end
 
-&#x20;   %% Frontend Input Layer
+    %% C-Style Pointer Bridge
+    A1 & A2 & A3 -->|Zero-Copy Raw C-Pointer Pass| B(Windows x64 Native C-Style Core Engine)
 
-&#x20;   subgraph Python Frontend \[Python Input Layer]
+    %% Asynchronous Processing Core
+    subgraph Multi_Channel_Radar_Core [Persistent Dual-Radar Processing Topology]
+        B --> C{Asynchronous Engine Controller}
+        C -->|Channel 1: Lower Boundary Scan| D[Forward Radar Engine]
+        C -->|Channel 2: Upper Boundary Scan| E[Backward Radar Engine]
+    end
 
-&#x20;       A1\[Continuous Int32 Array] 
+    %% Low-Level Hardware Registers
+    subgraph SIMD_Vector_Processing [Bare-Metal Hardware Layer]
+        D -->|Vectorized Load| F[__m256i / __m256 Vector Register Lanes]
+        E -->|Vectorized Load| G[__m256i / __m256 Vector Register Lanes]
+        F & G -->|Parallel Hardware Execution| H[AVX2 256-bit Vector Compare Intrinsics]
+    end
 
-&#x20;       A2\[Continuous Float32 Array]
+    %% Microsecond Latency Return
+    H -->|Instant Match Signal| I[Microsecond Latency Inter-Op Return]
+    I -->|Zero RAM Overhead Result| J[Python Output Vector]
 
-&#x20;       A3\[Unsorted Raw Memory Buffers]
-
-&#x20;   end
-
-
-
-&#x20;   %% C-Style Pointer Bridge
-
-&#x20;   A1 \& A2 \& A3 -->|Zero-Copy Raw C-Pointer Pass| B(Windows x64 Native C-Style Core Engine)
-
-
-
-&#x20;   %% Asynchronous Processing Core
-
-&#x20;   subgraph Multi-Channel Radar Core \[Persistent Dual-Radar Processing Topology]
-
-&#x20;       B --> C{Asynchronous Engine Controller}
-
-&#x20;       C -->|Channel 1: Lower Boundary Scan| D\[Forward Radar Engine]
-
-&#x20;       C -->|Channel 2: Upper Boundary Scan| E\[Backward Radar Engine]
-
-&#x20;   end
-
-
-
-&#x20;   %% Low-Level Hardware Registers
-
-&#x20;   subgraph SIMD Vector Processing \[Bare-Metal Hardware Layer]
-
-&#x20;       D -->|Vectorized Load| F\[\_\_m256i / \_\_m256 Vector Register Lanes]
-
-&#x20;       E -->|Vectorized Load| G\[\_\_m256i / \_\_m256 Vector Register Lanes]
-
-&#x20;       F \& G -->|Parallel Hardware Execution| H\[AVX2 256-bit Vector Compare Intrinsics]
-
-&#x20;   end
-
-
-
-&#x20;   %% Microsecond Latency Return
-
-&#x20;   H -->|Instant Match Signal| I\[Microsecond Latency Inter-Op Return]
-
-&#x20;   I -->|Zero RAM Overhead Result| J\[Python Output Vector]
-
-
-
-&#x20;   %% Styling
-
-&#x20;   style B fill:#1a365d,stroke:#333,stroke-width:2px,color:#fff
-
-&#x20;   style C fill:#2b6cb0,stroke:#333,stroke-width:2px,color:#fff
-
-&#x20;   style F fill:#2c5282,stroke:#333,stroke-width:1px,color:#fff
-
-&#x20;   style G fill:#2c5282,stroke:#333,stroke-width:1px,color:#fff
-
-&#x20;   style H fill:#9b2c2c,stroke:#333,stroke-width:2px,color:#fff
+    %% Styling
+    style B fill:#1a365d,stroke:#333,stroke-width:2px,color:#fff
+    style C fill:#2b6cb0,stroke:#333,stroke-width:2px,color:#fff
+    style F fill:#2c5282,stroke:#333,stroke-width:1px,color:#fff
+    style G fill:#2c5282,stroke:#333,stroke-width:1px,color:#fff
+    style H fill:#9b2c2c,stroke:#333,stroke-width:2px,color:#fff
 
