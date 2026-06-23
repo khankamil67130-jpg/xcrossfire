@@ -1,6 +1,6 @@
 import unittest
 import xcrossfire
-from array import import array
+from array import array
 import random
 import time
 
